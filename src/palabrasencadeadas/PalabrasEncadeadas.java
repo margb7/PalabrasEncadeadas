@@ -31,9 +31,9 @@ public class PalabrasEncadeadas {
         boolean sair = false;
         int op;
 
-        System.out.println("###");
-        System.out.println("#  Scrabble ");
-        System.out.println("###");
+        System.out.println("###       ###");
+        System.out.println("#  Scrabble #");
+        System.out.println("###       ###");
 
         System.out.println("");
 
@@ -83,8 +83,8 @@ public class PalabrasEncadeadas {
             }
 
         } while (op != 1 && op != 2);
-        
-        if( op == 1 ) {
+
+        if (op == 1) {
 
             amosarRegras();
 
@@ -138,8 +138,6 @@ public class PalabrasEncadeadas {
             System.out.println("2. Chegar a " + puntuacionVictoria + " puntos antes");
             System.out.println("3. Conseguir máis puntos en " + numRondas + " rondas");
 
-            // modoXogo = Entrada.lerByteEnRango(1,3);
-
             modoXogo = Entrada.lerByte();
 
             if (modoXogo < 1 || modoXogo > 3) {
@@ -151,11 +149,13 @@ public class PalabrasEncadeadas {
 
         } while (!correcto);
 
+        // Para cada modo de xogo os seus argumentos
+
         if (modoXogo == 1) {
 
             partida = new Partida(listaXogadores, modoXogo, tempo, numMaxErros);
 
-        } else if(modoXogo == 2) {
+        } else if (modoXogo == 2) {
 
             partida = new Partida(listaXogadores, modoXogo, puntuacionVictoria, tempo, numMaxErros);
 
@@ -192,7 +192,7 @@ public class PalabrasEncadeadas {
             System.out.printf("Introduce o nome do xogador número %d\n", (i + 1));
 
             str = Entrada.lerString();
-            lista[i] = new Xogador(str, i);
+            lista[i] = new Xogador(str);
 
         }
 

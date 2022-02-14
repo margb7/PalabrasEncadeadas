@@ -12,35 +12,46 @@ package palabrasencadeadas;
 public class Xogador {
 
     private String nome;
-    private byte puntos;
-    private byte turno;
+    private int puntos;
     private byte numErros;
+    private boolean estadoXogo;
 
-    public Xogador(String nome, byte turno) {
+    public Xogador(String nome) {
         this.nome = nome;
-        this.turno = turno;
         this.puntos = 0;
+        estadoXogo = true;
     }
 
     public String getNome() {
         return nome;
     }
 
-    public byte getPuntos() {
+    public int getPuntos() {
         return puntos;
-    }
-
-    public byte getTurno() {
-        return turno;
     }
 
     public byte getNumErros() {
         return numErros;
     }
 
-    public void setNumErros(byte num ) {
-        
+    public boolean podeXogar() {
+        return estadoXogo;
     }
-    
-}
 
+    public void setEstadoXogo(boolean estadoXogo) {
+        this.estadoXogo = estadoXogo;
+    }
+
+    public void setNumErros(byte num) {
+        this.numErros = (numErros >= 0) ? numErros : 0;
+    }
+
+    public void setPuntos(int puntos) {
+        this.puntos = (puntos >= 0) ? puntos : 0;
+    }
+
+    @Override
+    public String toString() {
+        return nome + " con " + puntos;
+    }
+}
