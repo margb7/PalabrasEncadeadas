@@ -50,6 +50,10 @@ public class Xogador {
         this.puntos = (puntos >= 0) ? puntos : 0;
     }
 
+    public void sumarPuntos(int puntos) {
+        this.puntos += puntos; 
+    }
+
     @Override
     public String toString() {
         return nome + " con " + puntos;

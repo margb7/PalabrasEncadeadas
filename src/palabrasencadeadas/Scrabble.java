@@ -120,4 +120,34 @@ public class Scrabble {
         return out;
     }
 
+    public static String taboaPuntuacions() {
+
+        StringBuilder puntuacions = new StringBuilder("");
+
+        puntuacions.append("  ____________________________________\n");
+        puntuacions.append(" |                              |     |\n");
+        puntuacions.append(" | A, E, I, O, U, L, N, R, S, T |  1  |\n");
+        puntuacions.append(" |______________________________|_____|\n");
+        puntuacions.append(" |                              |     |\n");
+        puntuacions.append(" |             D, G             |  2  |\n");
+        puntuacions.append(" |______________________________|_____|\n");
+        puntuacions.append(" |                              |     |\n");
+        puntuacions.append(" |          B, C, M, P          |  3  |\n");
+        puntuacions.append(" |______________________________|_____|\n");
+        puntuacions.append(" |                              |     |\n");
+        puntuacions.append(" |       F, H, V, V, W, Y       |  4  |\n");
+        puntuacions.append(" |______________________________|_____|\n");
+        puntuacions.append(" |                              |     |\n");
+        puntuacions.append(" |               K              |  5  |\n");
+        puntuacions.append(" |______________________________|_____|\n");
+        puntuacions.append(" |                              |     |\n");
+        puntuacions.append(" |             J, X             |  8  |\n");
+        puntuacions.append(" |______________________________|_____|\n");
+        puntuacions.append(" |                              |     |\n");
+        puntuacions.append(" |            Q, Z, Ñ           |  10 |\n");
+        puntuacions.append(" |______________________________|_____|\n");
+        
+        return puntuacions.toString();
+    }
+
 }

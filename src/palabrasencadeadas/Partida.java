@@ -16,14 +16,14 @@ public class Partida {
     private final byte NUM_MAX_ERROS;
 
     private Xogador[] listaXogadores;
-    private byte numTurno = 0;
-    private byte numRonda = 1;
-    private int val; // TODO: variable que significa puntuacion victoria / numRondas -->> será mejor
-                     // crear dos y no usar una
+    private Xogador[] listaXogadoresActivos;                 // TODO: falta implementar la creacion 
+    private byte numTurno = 0;              // TODO: dep
+    private byte numRonda = 0;
+    private int val;                    // TODO: variable que significa puntuacion victoria / numRondas 
     private String ultimaPalabra = "";
     private boolean rematada = false;
 
-    /**
+    /**s
      * Constructor para o modo Rendición
      * 
      * @param listaXogadores
@@ -65,57 +65,70 @@ public class Partida {
         boolean turnoRematado;
         Xogador xogadorTurno;
 
-        rematada = false;
-
         System.out.println(this);
 
         do {
 
-            xogadorTurno = listaXogadores[numTurno];
-            turnoRematado = false;
+            System.out.println("-------------------------------------");
+            System.out.printf(" -> RONDA NÚMERO %d:\n", (numRonda + 1));
+            
+            // plantearlo de forma que 
+            
+                // en este do while ocurre una ronda
+                
+                // dentro un for por cada jugador -> turnos
 
-            System.out.println("@--------");
-            System.out.printf(" RONDA NÚMERO %d:\n", numRonda);
-            System.out.printf("     Turno de %s\n", xogadorTurno.getNome());
+            for(int i = 0; i < listaXogadoresActivos.length && !rematada; i++ ) {
 
-            do {
+                turnoRematado = false;  
+                xogadorTurno = listaXogadoresActivos[i];
+                
+                System.out.printf("\t\tTurno de %s\n", xogadorTurno.getNome());
+                
+                do {
 
-                str = pedirPalabra();
+                    str = pedirPalabra();
 
-                if (str.equals("0")) {
+                    if (str.equals("0")) {
 
-                    xogadorTurno.setEstadoXogo(false);
+                        xogadorTurno.setEstadoXogo(false);
 
-                    if (calcularXogadoresActivos() == 1) {
+                        if (listaXogadoresActivos.length == 1) {
 
-                        rematada = true;
+                            rematada = true;
+
+                        }
 
                     }
 
-                }
+                    if (Scrabble.ePalabraValida(str, ultimaPalabra)) {
 
-                if (Scrabble.ePalabraValida(str, ultimaPalabra)) {
+                        turnoRematado = true;
+                        ultimaPalabra = str;
 
-                    turnoRematado = true;
-                    ultimaPalabra = str;
+                    }
 
-                }
+                } while (!turnoRematado);
 
-            } while (!turnoRematado);
+                xogadorTurno.sumarPuntos(Scrabble.puntuacionPalabra(str));
 
-            if (!rematada) {
-
-                xogadorTurno.setPuntos(xogadorTurno.getPuntos() + Scrabble.puntuacionPalabra(ultimaPalabra));
-
+                // algo -> comprobar si se acabo la partida
+                
             }
+            
+            if(!rematada ) {
+
+                 numRonda++;
+
+            } 
 
         } while (!rematada);
 
         amosarResultados();
 
     }
-
-    public String pedirPalabra() {
+    
+    private String pedirPalabra() {
 
         if (!ultimaPalabra.equals("")) {
 
@@ -137,7 +150,7 @@ public class Partida {
 
         System.out.println("*****RESULTADOS******");
 
-        if (calcularXogadoresActivos() == 1) {
+        if (listaXogadoresActivos.length == 1) {
 
             Xogador[] aux = new Xogador[listaXogadores.length - 1];
             int n = 0;
@@ -222,23 +235,6 @@ public class Partida {
         strb.append("-------------------------\n");
 
         return strb.toString();
-    }
-
-    private int calcularXogadoresActivos() {
-
-        int num = 0;
-
-        for (Xogador x : listaXogadores) {
-
-            if (x.podeXogar()) {
-
-                num++;
-
-            }
-
-        }
-
-        return num;
-    }
+    }  
 
 }
