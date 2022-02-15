@@ -5,14 +5,17 @@
  */
 package palabrasencadeadas;
 
-import java.util.regex.Pattern;
-
 /**
  *
  * @author a21mariogb
  */
 public class Scrabble {
 
+    /**
+     * Método para calcular o valor dunha palabra
+     * @param str a palabra
+     * @return o seu valor.
+     */
     public static int puntuacionPalabra(String str) {
 
         int num = 0;
@@ -25,45 +28,69 @@ public class Scrabble {
 
         return num;
     }
-
+    
+    /**
+     * Método para calcular o valor dun caracter
+     * @param c o caraacter 
+     * @return o valor. Devolve 0 se non é un caracter válido
+     */
     public static int puntuacionLetra(char c) {
-
-        Pattern pat = Pattern.compile(Character.toString(Character.toLowerCase(c)));
         int punt = 0;
 
-        if (pat.matcher("[aeioulnrst]").find()) {
-
-            punt = 1;
-
-        } else if (pat.matcher("[dg]").find()) {
-
-            punt = 2;
-
-        } else if (pat.matcher("[bcmp]").find()) {
-
-            punt = 3;
-
-        } else if (pat.matcher("[fhvwy]").find()) {
-
-            punt = 4;
-
-        } else if (pat.matcher("[k]").find()) {
-
-            punt = 5;
-
-        } else if (pat.matcher("[jx]").find()) {
-
-            punt = 8;
-
-        } else if (pat.matcher("[qzñ]").find()) {
-
-            punt = 10;
-
+        switch(c) {
+            case 'a':
+            case 'e':
+            case 'i':
+            case 'o':
+            case 'u':
+            case 'l':
+            case 'n':
+            case 'r':
+            case 's':
+            case 't':
+                punt = 1;
+                break;
+            case 'd':
+            case 'g':
+                punt = 2;
+                break;
+            case 'b':
+            case 'c':
+            case 'm':
+            case 'p':
+                punt = 3;
+                break;
+            case 'f':
+            case 'h':
+            case 'v':
+            case 'w':
+            case 'y':
+                punt = 4;
+                break;
+            case 'k':
+                punt = 5;
+                break;
+            case 'j':
+            case 'x':
+                punt = 8;
+                break;
+            case 'q':
+            case 'z':
+            case 'ñ':
+                punt = 10;
+                break;
         }
 
         return punt;
     }
 
+    /**
+     * Método para saber se a palabra introducida polo usuario é válida 
+     * @param nova a nova palabra
+     * @param palabraAnterior a palabra anterior
+     * @return true no caso de que nova sexa correcta en lonxitude e comezo. Tamén devolve true se a palabra anterior
+     * é unha cadea vacía e a nova palabra ten a lonxitude adecuada
+     */
     public static boolean ePalabraValida(String nova, String palabraAnterior) {
 
         boolean out = false;
