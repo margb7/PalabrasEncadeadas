@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package palabrasencadeadas;
 
 /**
@@ -12,10 +8,8 @@ package palabrasencadeadas;
 public class PalabrasEncadeadas {
 
     private static byte puntuacionVictoria = 20;
-    private static byte numMaxErros = 0;
     private static byte modoXogo;
-    private static byte tempo = 10;
-    private static byte numRondas;
+    private static byte numRondas = 5;
     private static Partida partida;
 
     /**
@@ -31,9 +25,9 @@ public class PalabrasEncadeadas {
         boolean sair = false;
         int op;
 
-        System.out.println("###       ###");
-        System.out.println("#  Scrabble #");
-        System.out.println("###       ###");
+        System.out.println("#####       #####");
+        System.out.println("###  SCRABBLE ###");
+        System.out.println("#####       #####");
 
         System.out.println("");
 
@@ -43,7 +37,7 @@ public class PalabrasEncadeadas {
             System.out.println("2. Xogar");
             System.out.println("3. Saír");
 
-            op = Entrada.lerInt();
+            op = EntradaSaida.lerInt();
 
             switch (op) {
 
@@ -52,6 +46,7 @@ public class PalabrasEncadeadas {
                     break;
                 case 2:
                     menuXogar();
+                    sair = outraPartida();
                     break;
                 case 3:
                     sair = true;
@@ -70,11 +65,12 @@ public class PalabrasEncadeadas {
         byte op;
 
         do {
+
             System.out.println("## Menú de regras ##\n");
             System.out.println("1. Mostrar regras");
             System.out.println("2. Configurar regras");
 
-            op = Entrada.lerByte();
+            op = EntradaSaida.lerByte();
 
             if (op != 1 && op != 2) {
 
@@ -93,11 +89,7 @@ public class PalabrasEncadeadas {
             menuConfiguracion();
 
         }
-        // mostrar config
 
-        // num err
-        // tempo
-        // num erros
     }
 
     private static void amosarRegras() {
@@ -125,9 +117,8 @@ public class PalabrasEncadeadas {
         Xogador[] listaXogadores;
 
         System.out.println("# XOGAR #\n");
-        System.out.println("- Introduce o numero de xogadores [2 - 4]");
 
-        listaXogadores = crearXogadores();
+        listaXogadores = pedirXogadores();
 
         do {
 
@@ -138,11 +129,11 @@ public class PalabrasEncadeadas {
             System.out.println("2. Chegar a " + puntuacionVictoria + " puntos antes");
             System.out.println("3. Conseguir máis puntos en " + numRondas + " rondas");
 
-            modoXogo = Entrada.lerByte();
+            modoXogo = EntradaSaida.lerByte();
 
             if (modoXogo < 1 || modoXogo > 3) {
 
-                System.out.println("Opción incorrecta");
+                EntradaSaida.imprimirErro("Opción incorrecta");
                 correcto = false;
 
             }
@@ -153,45 +144,76 @@ public class PalabrasEncadeadas {
 
         if (modoXogo == 1) {
 
-            partida = new Partida(listaXogadores, modoXogo, tempo, numMaxErros);
+            partida = new Partida(listaXogadores, modoXogo);
 
         } else if (modoXogo == 2) {
 
-            partida = new Partida(listaXogadores, modoXogo, puntuacionVictoria, tempo, numMaxErros);
+            partida = new Partida(listaXogadores, modoXogo, puntuacionVictoria);
 
         } else {
 
-            partida = new Partida(listaXogadores, numRondas, modoXogo, tempo, numMaxErros);
+            partida = new Partida(listaXogadores, numRondas, modoXogo);
 
         }
 
         partida.xogar();
     }
 
-    public static Xogador[] crearXogadores() {
+    private static boolean outraPartida() {
+
+        boolean valido;
+        char op;
+
+        System.out.println("Queres xogar outra partida ? (s/n)");
+
+        do {
+
+            valido = true;
+
+            op = Character.toLowerCase(EntradaSaida.lerChar());
+
+            if(op != 's' && op != 'n') {
+
+                valido = false;
+                EntradaSaida.imprimirErro("Opción incorrecta: introduce 's' ou 'n'");
+
+            }
+
+
+        } while(!valido);
+
+        return op == 'n';
+    }
+
+    public static Xogador[] pedirXogadores() {
         Xogador[] lista;
         String str;
         int numXogadores;
 
+        System.out.println("- Introduce o numero de xogadores [2 - 4]");
+        
         do {
 
-            numXogadores = Entrada.lerByte();
+            numXogadores = EntradaSaida.lerByte();
 
             if (numXogadores < 2 || numXogadores > 4) {
 
-                System.out.println("Só se poden crear partidas de 2 a 4 xogadores");
+                EntradaSaida.imprimirErro("Só se poden crear partidas de 2 a 4 xogadores");
 
             }
 
         } while (numXogadores < 2 || numXogadores > 4);
 
+        
         lista = new Xogador[numXogadores];
+
+
 
         for (byte i = 0; i < numXogadores; i++) {
 
             System.out.printf("Introduce o nome do xogador número %d\n", (i + 1));
 
-            str = Entrada.lerString();
+            str = EntradaSaida.lerString();
             lista[i] = new Xogador(str);
 
         }

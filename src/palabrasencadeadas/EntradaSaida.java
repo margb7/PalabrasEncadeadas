@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package palabrasencadeadas;
 
 import java.util.Scanner;
@@ -11,13 +6,17 @@ import java.util.Scanner;
  *
  * @author a21mariogb
  */
-public class Entrada {
+public class EntradaSaida {
+
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_RESET = "\u001B[0m";
 
     private static final Scanner input = new Scanner(System.in);
 
     private static void error(String tipoEsperado) {
 
-        System.out.println("Esperábase un " + tipoEsperado);
+        imprimirErro("Esperábase un " + tipoEsperado);
+        
     }
 
     public static long lerLong() {
@@ -161,22 +160,9 @@ public class Entrada {
         return input.nextLine().charAt(0);
     }
 
-    public static byte lerByteEnRango(byte a, byte b) {
+    public static void imprimirErro(String str) {
 
-        byte salida;
+        System.out.println(ANSI_RED + str + ANSI_RESET);
 
-        do {
-
-            salida = lerByte();
-
-            if (salida < a || salida > b) {
-
-                System.out.printf("Pídese un valor de %d a %d", a, b);
-
-            }
-
-        } while (salida < a || salida > b);
-
-        return salida;
     }
 }

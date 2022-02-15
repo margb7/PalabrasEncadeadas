@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package palabrasencadeadas;
 
 /**
@@ -22,7 +17,7 @@ public class Scrabble {
 
         for (int i = 0; i < str.length(); i++) {
 
-            num += str.charAt(i);
+            num += puntuacionLetra(str.charAt(i));
 
         }
 
@@ -36,6 +31,8 @@ public class Scrabble {
      */
     public static int puntuacionLetra(char c) {
         int punt = 0;
+
+        c = Character.toLowerCase(c);
 
         switch(c) {
             case 'a':
@@ -95,7 +92,7 @@ public class Scrabble {
 
         boolean out = false;
 
-        if (nova.length() > 3) {
+        if (nova.length() >= 3) {
 
             if (palabraAnterior.equals("")) {
 

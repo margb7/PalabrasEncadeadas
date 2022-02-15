@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package palabrasencadeadas;
 
 /**
@@ -13,7 +8,6 @@ public class Xogador {
 
     private String nome;
     private int puntos;
-    private byte numErros;
     private boolean estadoXogo;
 
     public Xogador(String nome) {
@@ -30,10 +24,6 @@ public class Xogador {
         return puntos;
     }
 
-    public byte getNumErros() {
-        return numErros;
-    }
-
     public boolean podeXogar() {
         return estadoXogo;
     }
@@ -42,20 +32,12 @@ public class Xogador {
         this.estadoXogo = estadoXogo;
     }
 
-    public void setNumErros(byte num) {
-        this.numErros = (numErros >= 0) ? numErros : 0;
-    }
-
-    public void setPuntos(int puntos) {
-        this.puntos = (puntos >= 0) ? puntos : 0;
-    }
-
-    public void sumarPuntos(int puntos) {
-        this.puntos += puntos; 
+    public void sumarPuntos(int n) {
+        this.puntos += n; 
     }
 
     @Override
     public String toString() {
-        return nome + " con " + puntos;
+        return nome + " con " + puntos + " puntos";
     }
 }

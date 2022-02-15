@@ -1,9 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package palabrasencadeadas;
+
 
 /**
  *
@@ -11,13 +7,10 @@ package palabrasencadeadas;
  */
 public class Partida {
 
-    private final byte TEMPO;
     private final byte MODO_XOGO;
-    private final byte NUM_MAX_ERROS;
 
-    private Xogador[] listaXogadores;
-    private Xogador[] listaXogadoresActivos;                 // TODO: falta implementar la creacion 
-    private byte numTurno = 0;              // TODO: dep
+    private Xogador[] listaXogadores;               
+    private byte numTurno = 0;              
     private byte numRonda = 0;
     private int val;                    // TODO: variable que significa puntuacion victoria / numRondas 
     private String ultimaPalabra = "";
@@ -31,13 +24,8 @@ public class Partida {
      * @param tempo
      * @param numMaxErros
      */
-    public Partida(Xogador[] listaXogadores, byte modoXogo, byte tempo, byte numMaxErros) {
-
-        this.listaXogadores = listaXogadores;
-        this.MODO_XOGO = modoXogo;
-        this.TEMPO = tempo;
-        this.NUM_MAX_ERROS = numMaxErros;
-
+    public Partida(Xogador[] listaXogadores, byte modoXogo) {
+        this(listaXogadores, modoXogo, -1);
     }
 
     /**
@@ -49,12 +37,10 @@ public class Partida {
      * @param tempo
      * @param numMaxErros
      */
-    public Partida(Xogador[] listaXogadores, byte modoXogo, int val, byte tempo, byte numMaxErros) {
+    public Partida(Xogador[] listaXogadores, byte modoXogo, int val) {
 
         this.listaXogadores = listaXogadores;
         this.MODO_XOGO = modoXogo;
-        this.TEMPO = tempo;
-        this.NUM_MAX_ERROS = numMaxErros;
         this.val = val;
 
     }
@@ -63,28 +49,46 @@ public class Partida {
 
         String str;
         boolean turnoRematado;
+        int puntuacionObtida;
         Xogador xogadorTurno;
 
         System.out.println(this);
 
-        do {
+        do {    // ronda
 
             System.out.println("-------------------------------------");
             System.out.printf(" -> RONDA NÚMERO %d:\n", (numRonda + 1));
-            
-            // plantearlo de forma que 
-            
-                // en este do while ocurre una ronda
-                
-                // dentro un for por cada jugador -> turnos
 
-            for(int i = 0; i < listaXogadoresActivos.length && !rematada; i++ ) {
+            numTurno = 0;
 
-                turnoRematado = false;  
-                xogadorTurno = listaXogadoresActivos[i];
+            for(int i = 0; i < listaXogadores.length && !rematada; i++ ) {      // turno
+
+                puntuacionObtida = 0;
+                turnoRematado = false; 
+                xogadorTurno = null;
+
+                do {
+
+                    if(numTurno > listaXogadores.length) {
+
+                        numTurno = 0;
+
+                    }
+
+                    if(listaXogadores[numTurno].podeXogar() ) {
+
+                        xogadorTurno = listaXogadores[numTurno];
+
+                    } else {
+
+                        numTurno++;
+
+                    }
+
+                } while(xogadorTurno == null);
                 
-                System.out.printf("\t\tTurno de %s\n", xogadorTurno.getNome());
-                
+                System.out.printf("--Turno de %s\n", xogadorTurno.getNome());
+
                 do {
 
                     str = pedirPalabra();
@@ -92,8 +96,9 @@ public class Partida {
                     if (str.equals("0")) {
 
                         xogadorTurno.setEstadoXogo(false);
+                        turnoRematado = true;
 
-                        if (listaXogadoresActivos.length == 1) {
+                        if (calcularXogadoresActivos() == 1) {
 
                             rematada = true;
 
@@ -101,31 +106,64 @@ public class Partida {
 
                     }
 
-                    if (Scrabble.ePalabraValida(str, ultimaPalabra)) {
+                    if (!turnoRematado){
 
-                        turnoRematado = true;
-                        ultimaPalabra = str;
+                        if(Scrabble.ePalabraValida(str, ultimaPalabra)) {
+
+                            turnoRematado = true;
+                            ultimaPalabra = str;
+
+                        } else {
+
+                            EntradaSaida.imprimirErro("ERRO: A palabra debe ter 3 caracteres polo menos e coincidir co final de "  + ultimaPalabra);
+
+                        }
 
                     }
 
+
                 } while (!turnoRematado);
 
-                xogadorTurno.sumarPuntos(Scrabble.puntuacionPalabra(str));
+                if(xogadorTurno.podeXogar()) {
+                 
+                    puntuacionObtida = Scrabble.puntuacionPalabra(str);
+                    xogadorTurno.sumarPuntos(puntuacionObtida);
 
-                // algo -> comprobar si se acabo la partida
+                    if(MODO_XOGO == 2) {
+
+                        if(xogadorTurno.getPuntos() >= val) {
+
+                            rematada = true;
+
+                        }
+
+                    }
+
+                    numTurno++;
+
+                }
                 
             }
             
+            if(MODO_XOGO == 3 ) {
+
+                if(numRonda == val ) {
+
+                    rematada = true;
+
+                }
+
+            }
+
             if(!rematada ) {
 
-                 numRonda++;
+                numRonda++;
 
             } 
 
         } while (!rematada);
 
         amosarResultados();
-
     }
     
     private String pedirPalabra() {
@@ -141,18 +179,16 @@ public class Partida {
 
         }
 
-        return Entrada.lerString();
+        return EntradaSaida.lerString();
     }
 
     private void amosarResultados() {
 
-        Xogador[] tablaResultados = new Xogador[listaXogadores.length];
-
         System.out.println("*****RESULTADOS******");
 
-        if (listaXogadoresActivos.length == 1) {
+        if (calcularXogadoresActivos() == 1) {    // so un xogador restante
 
-            Xogador[] aux = new Xogador[listaXogadores.length - 1];
+            Xogador[] tablaResultados = new Xogador[listaXogadores.length];
             int n = 0;
 
             for (Xogador x : listaXogadores) {
@@ -163,20 +199,13 @@ public class Partida {
 
                 } else {
 
-                    aux[n] = x;
-                    n++;
+                    tablaResultados[n++ + 1] = x;
 
                 }
 
             }
 
-            for (int i = 1; i < tablaResultados.length; i++) {
-
-                tablaResultados[i] = aux[i - 1];
-
-            }
-
-            System.out.println("Gañou " + tablaResultados[0] + " ao non rendirse");
+            System.out.println("Gañou " + tablaResultados[0]);
             System.out.println("\n-Resultados do resto: ");
 
             for (int i = 1; i < tablaResultados.length; i++) {
@@ -187,8 +216,115 @@ public class Partida {
 
         } else {
 
+            ordenarPorPuntos(listaXogadores);
+
+
+
+            if( MODO_XOGO == 2 ) { 
+
+                System.out.println("Gañou " + listaXogadores[listaXogadores.length - 1] + " ao chegar antes a " + val + " puntos" );
+
+            } else {
+
+                int offset = 0;
+
+                if (listaXogadores[listaXogadores.length - 1].getPuntos() != listaXogadores[listaXogadores.length - 2].getPuntos() ) {
+
+                    System.out.println("Gañou " + listaXogadores[listaXogadores.length - 1] + " ao obter mais puntuación en " + val + " rondas");
+
+                } else {    // Empate
+
+                    int puntuacion = listaXogadores[listaXogadores.length - 1].getPuntos();
+
+                    for(int i = 0 ; i < listaXogadores.length - 2; i++ ) {
+
+                        if(listaXogadores[i].getPuntos() == puntuacion ) {
+
+                            offset++;
+
+                        }
+
+                    }
+
+                    System.out.print("Empate entre ");
+
+                    for(int i = listaXogadores.length; i >= listaXogadores.length- 1 - offset; i-- ) {
+
+                        System.out.print(listaXogadores[i].getNome() + " ");
+
+                    }
+
+                    System.out.println("");
+
+                }
+
+
+
+                if(offset != listaXogadores.length) {
+                
+                    System.out.println("Resultados do resto de xogadores:");
+
+                    for(int i = listaXogadores.length - 1 - offset; i >= 0; i-- ) {
+
+                        System.out.println(listaXogadores[i]);
+
+                    }
+
+                }
+
+
+            }
+
         }
 
+    }
+
+    private static void ordenarPorPuntos(Xogador[] lista ) {
+
+        int numIntercambios = 0;
+        boolean ordenado = false;
+        Xogador aux;
+
+        while (!ordenado) {
+
+            for (int i = 0; i < lista.length - 1; i++) {
+
+                if (lista[i].getPuntos() > lista[i + 1].getPuntos()) {
+
+                    aux = lista[i];
+
+                    lista[i] = lista[i + 1];
+                    lista[i + 1] = aux;
+
+                    numIntercambios++;
+                }
+
+            }
+
+            if (numIntercambios == 0) { 
+
+                ordenado = true;
+
+            }
+
+            numIntercambios = 0; 
+        }
+    }
+
+    private int calcularXogadoresActivos() {
+        int num = 0;
+
+        for(Xogador x : listaXogadores ) {
+
+            if(x.podeXogar()) {
+
+                num++;
+
+            }
+
+        } 
+
+        return num;
     }
 
     @Override
@@ -217,19 +353,6 @@ public class Partida {
             default:
                 strb.append("- Modo de xogo: conseguir máis puntos en ").append(val).append(" rondas\n");
                 break;
-        }
-
-        if (TEMPO != 0) {
-
-            strb.append("- Se pasan ").append(TEMPO)
-                    .append(" segundos sen introducir a palabra automáticamente pérdese\n");
-
-        }
-
-        if (NUM_MAX_ERROS != 0) {
-
-            strb.append("- Se se cometen ").append(NUM_MAX_ERROS).append(" erros pérdese\n");
-
         }
 
         strb.append("-------------------------\n");
