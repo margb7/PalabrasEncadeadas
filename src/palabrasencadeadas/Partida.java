@@ -12,7 +12,7 @@ public class Partida {
     private Xogador[] listaXogadores;               
     private byte numTurno = 0;              
     private byte numRonda = 0;
-    private int val;                    // TODO: variable que significa puntuacion victoria / numRondas 
+    private int val;
     private String ultimaPalabra = "";
     private boolean rematada = false;
 
@@ -57,7 +57,7 @@ public class Partida {
         do {    // ronda
 
             System.out.println("-------------------------------------");
-            System.out.printf(" -> RONDA NÚMERO %d:\n", (numRonda + 1));
+            System.out.printf(" -# RONDA NÚMERO %d #-\n", (numRonda + 1));
 
             numTurno = 0;
 
@@ -87,7 +87,7 @@ public class Partida {
 
                 } while(xogadorTurno == null);
                 
-                System.out.printf("--Turno de %s\n", xogadorTurno.getNome());
+                System.out.println("--Turno de " + xogadorTurno); 
 
                 do {
 
@@ -115,7 +115,7 @@ public class Partida {
 
                         } else {
 
-                            EntradaSaida.imprimirErro("ERRO: A palabra debe ter 3 caracteres polo menos e coincidir co final de "  + ultimaPalabra);
+                            EntradaSaida.imprimirErro("\tERRO: A palabra debe ter 3 caracteres polo menos e coincidir co final de "  + ultimaPalabra);
 
                         }
 
@@ -128,6 +128,8 @@ public class Partida {
                  
                     puntuacionObtida = Scrabble.puntuacionPalabra(str);
                     xogadorTurno.sumarPuntos(puntuacionObtida);
+
+                    System.out.println(ultimaPalabra + " vale " + puntuacionObtida + " puntos\n");
 
                     if(MODO_XOGO == 2) {
 
@@ -170,12 +172,12 @@ public class Partida {
 
         if (!ultimaPalabra.equals("")) {
 
-            System.out.print("Introduce unha palabra que comece por \"");
+            System.out.print("\tIntroduce unha palabra que comece por \"");
             System.out.println(ultimaPalabra.substring(ultimaPalabra.length() - 3, ultimaPalabra.length()) + "\" : ");
 
         } else {
 
-            System.out.println("Introduce a primeira palabra: ");
+            System.out.println("\tIntroduce a primeira palabra: ");
 
         }
 
@@ -184,7 +186,7 @@ public class Partida {
 
     private void amosarResultados() {
 
-        System.out.println("*****RESULTADOS******");
+        System.out.println("\n*****RESULTADOS******");
 
         if (calcularXogadoresActivos() == 1) {    // so un xogador restante
 
@@ -218,11 +220,17 @@ public class Partida {
 
             ordenarPorPuntos(listaXogadores);
 
-
-
             if( MODO_XOGO == 2 ) { 
 
                 System.out.println("Gañou " + listaXogadores[listaXogadores.length - 1] + " ao chegar antes a " + val + " puntos" );
+                System.out.println("\n***Resultados do resto de xogadores***");
+
+                for(int i = listaXogadores.length - 2; i >= 0; i-- ) {
+
+                    System.out.println("-" + listaXogadores[i]);
+
+                }
+
 
             } else {
 
@@ -258,15 +266,13 @@ public class Partida {
 
                 }
 
-
-
                 if(offset != listaXogadores.length) {
                 
                     System.out.println("Resultados do resto de xogadores:");
 
-                    for(int i = listaXogadores.length - 1 - offset; i >= 0; i-- ) {
+                    for(int i = listaXogadores.length - 2 - offset; i >= 0; i-- ) {
 
-                        System.out.println(listaXogadores[i]);
+                        System.out.println("-" + listaXogadores[i]);
 
                     }
 

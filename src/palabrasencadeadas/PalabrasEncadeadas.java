@@ -7,21 +7,19 @@ package palabrasencadeadas;
  */
 public class PalabrasEncadeadas {
 
-    private static byte puntuacionVictoria = 20;
+    private static int puntuacionVictoria = 20;
     private static byte modoXogo;
-    private static byte numRondas = 5;
+    private static int numRondas = 5;
     private static Partida partida;
 
     /**
+     * As melloras son: 
+     *      - Tres modos de xogo
+     *      - Varios xogadores
      * @param args the command line arguments
      */
     public static void main(String[] args) {
 
-        menu();
-
-    }
-
-    public static void menu() {
         boolean sair = false;
         int op;
 
@@ -33,20 +31,23 @@ public class PalabrasEncadeadas {
 
         do {
 
-            System.out.println("1. Regras");
-            System.out.println("2. Xogar");
+            System.out.println("-------");
+            System.out.println("MENU DE XOGO");
+            System.out.println("-------");
+            System.out.println("1. Xogar");
+            System.out.println("2. Amosar táboa de puntuacións");
             System.out.println("3. Saír");
+            System.out.println("-------");
 
             op = EntradaSaida.lerInt();
 
             switch (op) {
 
                 case 1:
-                    menuRegras();
+                    menuXogar();
                     break;
                 case 2:
-                    menuXogar();
-                    sair = outraPartida();
+                    System.out.println(Scrabble.taboaPuntuacions());
                     break;
                 case 3:
                     sair = true;
@@ -60,51 +61,9 @@ public class PalabrasEncadeadas {
 
     }
 
-    public static void menuRegras() {
-
-        byte op;
-
-        do {
-
-            System.out.println("## Menú de regras ##\n");
-            System.out.println("1. Mostrar regras");
-            System.out.println("2. Configurar regras");
-
-            op = EntradaSaida.lerByte();
-
-            if (op != 1 && op != 2) {
-
-                System.out.println("Opción incorrecta");
-
-            }
-
-        } while (op != 1 && op != 2);
-
-        if (op == 1) {
-
-            amosarRegras();
-
-        } else {
-
-            menuConfiguracion();
-
-        }
-
-    }
-
-    private static void amosarRegras() {
-
-    }
-
-    private static void menuConfiguracion() {
-
-    }
-
     /**
      * Menu para crear e iniciar a partida. Neste menú pódese elixir o modo de xogo.
-     * No caso de elixir un modo de xogo cuxos valores non fosen configurados
-     * previamente no menú de
-     * regras daránselle valores predeterminados. Escóllese entre:
+     * Escóllese entre:
      * <ul>
      * <li>Modo ata a rendición</li>
      * <li>Modo chegar ata certa puntuación (por defecto x)</li>
@@ -123,66 +82,74 @@ public class PalabrasEncadeadas {
         do {
 
             correcto = true;
-
-            System.out.println("- Escolle a condición de victoria");
+            System.out.println("-------");
+            System.out.println("- Escolle a condición de victoria:");
+            System.out.println("-------");
             System.out.println("1. Ata a rendición");
-            System.out.println("2. Chegar a " + puntuacionVictoria + " puntos antes");
-            System.out.println("3. Conseguir máis puntos en " + numRondas + " rondas");
+            System.out.println("2. Chegar a x  puntos antes");
+            System.out.println("3. Conseguir máis puntos x número de rondas");
+            System.out.println("-------");
 
             modoXogo = EntradaSaida.lerByte();
 
             if (modoXogo < 1 || modoXogo > 3) {
 
-                EntradaSaida.imprimirErro("Opción incorrecta");
+                EntradaSaida.imprimirErro("**Opción incorrecta");
                 correcto = false;
 
             }
 
         } while (!correcto);
 
-        // Para cada modo de xogo os seus argumentos
+        switch (modoXogo) {
 
-        if (modoXogo == 1) {
+            case 1:
 
-            partida = new Partida(listaXogadores, modoXogo);
+                partida = new Partida(listaXogadores, modoXogo);
+                break;
 
-        } else if (modoXogo == 2) {
+            case 2:
 
-            partida = new Partida(listaXogadores, modoXogo, puntuacionVictoria);
+                System.out.println("Introduce a puntuación de victoria (mínimo 20)");
+                do {
 
-        } else {
+                    correcto = true;
+                    puntuacionVictoria = EntradaSaida.lerInt();
 
-            partida = new Partida(listaXogadores, numRondas, modoXogo);
+                    if (puntuacionVictoria < 20) {
 
+                        EntradaSaida.imprimirErro("Como mínimo deben ser 20 puntos");
+                        correcto = false;
+
+                    }
+
+                } while (!correcto);
+
+                partida = new Partida(listaXogadores, modoXogo, puntuacionVictoria);
+                break;
+
+            default:
+
+                System.out.println("Introduce o número de rondas do xogo (mínimo 1 ronda)");
+                do {
+                    correcto = true;
+
+                    numRondas = EntradaSaida.lerInt();
+
+                    if (numRondas < 1) {
+
+                        EntradaSaida.imprimirErro("Como mínimo 1 ronda");
+                        correcto = false;
+
+                    }
+
+                } while (!correcto);
+
+                partida = new Partida(listaXogadores, modoXogo, numRondas);
+                break;
         }
 
         partida.xogar();
-    }
-
-    private static boolean outraPartida() {
-
-        boolean valido;
-        char op;
-
-        System.out.println("Queres xogar outra partida ? (s/n)");
-
-        do {
-
-            valido = true;
-
-            op = Character.toLowerCase(EntradaSaida.lerChar());
-
-            if(op != 's' && op != 'n') {
-
-                valido = false;
-                EntradaSaida.imprimirErro("Opción incorrecta: introduce 's' ou 'n'");
-
-            }
-
-
-        } while(!valido);
-
-        return op == 'n';
     }
 
     public static Xogador[] pedirXogadores() {
@@ -191,7 +158,7 @@ public class PalabrasEncadeadas {
         int numXogadores;
 
         System.out.println("- Introduce o numero de xogadores [2 - 4]");
-        
+
         do {
 
             numXogadores = EntradaSaida.lerByte();
@@ -204,10 +171,7 @@ public class PalabrasEncadeadas {
 
         } while (numXogadores < 2 || numXogadores > 4);
 
-        
         lista = new Xogador[numXogadores];
-
-
 
         for (byte i = 0; i < numXogadores; i++) {
 
