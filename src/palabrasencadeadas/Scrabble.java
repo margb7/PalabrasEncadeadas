@@ -1,14 +1,17 @@
 package palabrasencadeadas;
 
 /**
- *
+ * Clase cos métodos relacionados co Scrabble,
+ * como a puntuación das palabras e das letras.
  * @author a21mariogb
  */
 public class Scrabble {
 
     /**
      * Método para calcular o valor dunha palabra
-     * @param str a palabra
+     * O valor da palabra calculase sumando o valor individual das letras
+     * que a forman.
+     * @param str a palabra da que se quere calcular o valor
      * @return o seu valor.
      */
     public static int puntuacionPalabra(String str) {
@@ -26,7 +29,7 @@ public class Scrabble {
     
     /**
      * Método para calcular o valor dun caracter
-     * @param c o caraacter 
+     * @param c o caraacter do que se quere calcular o valor
      * @return o valor. Devolve 0 se non é un caracter válido
      */
     public static int puntuacionLetra(char c) {
@@ -117,6 +120,12 @@ public class Scrabble {
         return out;
     }
 
+    
+    /**
+     * Metodo que devolve a taboa de puntuacions en forma de string
+     * para a súa impresión por pantalla.
+     * @return a táoa de puntuacións en forma de string
+     */
     public static String taboaPuntuacions() {
 
         StringBuilder puntuacions = new StringBuilder("");

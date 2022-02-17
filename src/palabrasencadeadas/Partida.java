@@ -2,7 +2,7 @@ package palabrasencadeadas;
 
 
 /**
- *
+ * Clase que contén os métodos relacionados coa estructura da partida.
  * @author a21mariogb
  */
 public class Partida {
@@ -45,6 +45,10 @@ public class Partida {
 
     }
 
+    /**
+     * Metodo que leva a cabo os pasos dunha partida e chama
+     * os métodos que levan a cabo os pasos intermedios.
+     */
     public void xogar() {
 
         String str;
@@ -167,7 +171,11 @@ public class Partida {
 
         amosarResultados();
     }
-    
+    /**
+     * Método que pide por pantalla que se introduza unha palabra,
+     * indicando por pantalla as dúas primeiras letras que debe conter.
+     * @return a palabra introducida, en formato cadea.
+     */
     private String pedirPalabra() {
 
         if (!ultimaPalabra.equals("")) {
@@ -184,6 +192,9 @@ public class Partida {
         return EntradaSaida.lerString();
     }
 
+    /**
+     * Método que amosa por pantalla os resultados da partida.
+     */
     private void amosarResultados() {
 
         System.out.println("\n*****RESULTADOS******");
@@ -285,6 +296,11 @@ public class Partida {
 
     }
 
+    /**
+     * Método que ordena un array de xogadores en base ós puntos,
+     * en orde ascendente
+     * @param lista o array de xogadores a ordenar
+     */
     private static void ordenarPorPuntos(Xogador[] lista ) {
 
         int numIntercambios = 0;
@@ -317,6 +333,11 @@ public class Partida {
         }
     }
 
+    /**
+     * Método que calcula o número de xogadores activos, isto é,
+     * o número de xogadores que poden xogar.
+     * @return o número de xogadores activos
+     */
     private int calcularXogadoresActivos() {
         int num = 0;
 
@@ -333,6 +354,10 @@ public class Partida {
         return num;
     }
 
+    /**
+     * Método que sobreescribe o método toString para clase Partida
+     * @return A información da partida
+     */
     @Override
     public String toString() {
 

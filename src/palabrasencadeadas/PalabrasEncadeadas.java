@@ -13,9 +13,10 @@ public class PalabrasEncadeadas {
     private static Partida partida;
 
     /**
-     * As melloras son: 
-     *      - Tres modos de xogo
-     *      - Varios xogadores
+     * Método principal do proxecto Palabras Encadeadas + Scrabble
+     * As melloras sore o proxecto base son: 
+     *      - Implementación de tres modos de xogo
+     *      - Opción a varios xogadores
      * @param args the command line arguments
      */
     public static void main(String[] args) {
@@ -152,6 +153,11 @@ public class PalabrasEncadeadas {
         partida.xogar();
     }
 
+    /**
+     * Método que solicita o número de xogadores
+     * e posteriormente pide os seus respectivos nomes.
+     * @return a lista de xogadores, almacenada nun array
+     */
     public static Xogador[] pedirXogadores() {
         Xogador[] lista;
         String str;
